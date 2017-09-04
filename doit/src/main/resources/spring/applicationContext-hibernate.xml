@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+<!-- p6spy 代理设置-->
+
+	<bean id="dataSource" class="com.p6spy.engine.spy.P6DataSource">
+		<constructor-arg ref="dataSourceTarget"/>
+	</bean>
+
+	<bean id="dataSourceTarget" class="org.apache.commons.dbcp2.BasicDataSource" >
+		<property name="url" value="${jdbc.url}"> </property>
+		<property name="username" value="${jdbc.username}"> </property>
+		<property name="password" value="${jdbc.password}"> </property>
+		<property name="driverClassName" value="${jdbc.driverClassName}"> </property>
+		<property name="validationQuery" value="select count(*) from systables"> </property>
+		<!--<property name="validationQuery" value="select 1 "> </property>-->
+
+	</bean>
+
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<!-- 注入数据源 相关信息看源码 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 扫描的实体所在的包-->
+		<property name="packagesToScan">
+			<list>
+				<value>com.asd.modules.pojo.*.model</value>
+			</list>
+		</property>
+		<!-- hibernate配置信息 -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
+				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="transactionManager"
+		  class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- 配置事务的传播特性 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="edit*" propagation="REQUIRED" />
+			<tx:method name="batchUpdate" propagation="REQUIRED" />
+			<tx:method name="batchDelete" propagation="REQUIRED" />
+			<tx:method name="*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 配置事务的切入点 -->
+	<aop:config>
+		<aop:pointcut id="targetMethod" expression="execution(* com.asd.modules.service.impl.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="targetMethod" />
+	</aop:config>
+
+
+</beans>

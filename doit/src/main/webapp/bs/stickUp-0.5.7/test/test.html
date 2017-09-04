@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html><head><script type="text/javascript">
+  //for global use
+  var contextRootPath = "/pdfbpoc";
+</script>
+
+
+
+
+
+
+<title>PDF-BPDF-B开发框架</title>
+<meta charset="GBK">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+
+ 
+
+
+<!-- Bootstrap Core CSS -->
+<link href="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\sbadmin2_v1.0.5\bower_components\bootstrap\dist\css\bootstrap.css" rel="stylesheet">
+<!-- Custom Fonts -->
+<link href="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\sbadmin2_v1.0.5\bower_components\font-awesome\css\font-awesome.min.css" rel="stylesheet" type="text/css">
+<!-- MetisMenu CSS -->
+<link href="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\sbadmin2_v1.0.5\bower_components\metisMenu\dist\metisMenu.min.css" rel="stylesheet">
+<!-- Custom CSS -->
+<link href="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\sbadmin2_v1.0.5\dist\css\sb-admin-2.css" rel="stylesheet">
+
+
+<link href="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\datatables\css\jquery.dataTables.min.css" rel="stylesheet" type="text/css">
+<link href="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\bootstrap-datetimepicker_v2.3.0\css\bootstrap-datetimepicker.css" rel="stylesheet" type="text/css">
+<link href="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\qtip2.1.1\jquery.qtip.css" rel="stylesheet" type="text/css">
+<link href="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\bootstrap-modal\css\bootstrap-modal.css" rel="stylesheet" type="text/css">
+
+<link href="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\stickUp-0.5.7\example\stickup.css" rel="stylesheet" type="text/css">
+
+
+
+<!-- jQuery -->
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\sbadmin2_v1.0.5\bower_components\jquery\dist\jquery.js"></script>
+<script type="text/javascript">
+$(function(){
+	$.ajax({
+	    type: "get",
+	    url: "/pdfbpoc/menu/showBootStrapMenu.do?systemCode=pdfbpoc&menuId=0&language=C&userCode=0000000000",
+	    async:false,
+	    success: function(responseText,textStatus){ 
+	    	$("#side-menu").append(responseText);
+	    }
+	});
+	
+
+});
+</script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\sbadmin2_v1.0.5\bower_components\bootstrap\dist\js\bootstrap.min.js"></script>
+<!-- Metis Menu Plugin JavaScript -->
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\sbadmin2_v1.0.5\bower_components\metisMenu\dist\metisMenu.min.js"></script>
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\sbadmin2_v1.0.5\js\jquery.metisMenu.js"></script>
+ 
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\bootstrap-modal\js\bootstrap-modalmanager.js" type="text/javascript"></script>
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\bootstrap-modal\js\bootstrap-modal.js" type="text/javascript"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\sbadmin2_v1.0.5\dist\js\sb-admin-2.js"></script>
+
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\bootstrap-datetimepicker_v2.3.0\js\bootstrap-datetimepicker.js" type="text/javascript"></script>
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\bootstrap-datetimepicker_v2.3.0\js\locales\bootstrap-datetimepicker.zh-CN-GBK.js" type="text/javascript"></script>
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\jquery-validation-1.13.0\jquery.validate.js"></script>
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\jquery-validation-1.13.0\localization\messages_zh.js"></script>
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\jquery-validation-1.13.0\additional-methods.js"></script>
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\qtip2.1.1\jquery.qtip.js" type="text/javascript"></script>
+
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\datatables\js\jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\datatables\js\AjaxList.js" type="text/javascript"></script>
+
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\bootbox_v4.3.0\bootbox.js" type="text/javascript"></script>
+<script src="E:\CoreProjects\picc\bootstrap\pdfbpoc\webapp\widgets\stickUp-0.5.7\stickUp.js" type="text/javascript"></script>
+
+ 
+
+
+
+
+
+<style>
+</style>
+
+</head>
+<body>
+	<div id="wrapper">
+		
+        <div tabindex="-1" class="modal fade" id="ajax-pwdModifyModal" role="dialog" style="display: none;"></div>
+        <div id="page-wrapper" style="min-height: 610px;">
+			
+			<div class="row">
+				<div class="col-lg-12">
+					<br>
+					<ol class="breadcrumb"><li><i class="fa fa-dashboard"></i> <a href="/pdfbpoc/">首页</a></li><li class="active"><i class="fa fa-table"></i> 系统管理</li><li class="active"><i class="fa fa-table"></i> 基础数据</li><li class="active"><i class="fa fa-table"></i> 员工管理</li></ol>
+				</div>
+			</div>
+			
+			
+			
+	<div class="row recorded lookup">
+		<div class="col-lg-12">
+			<div class="alert alert-danger error" style="display: none;">
+				<span></span>.<br clear="all">
+			</div>
+			
+				<!-- START THE NAVBAR -->
+    <div class="navbar-wrapper">
+      <div class="container">
+      <div class="navwrapper">
+        <div class="navbar navbar-inverse navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">stickUp</a>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li class="menuItem active"><a href="#collapseOne">collapseOne</a></li>
+                <li class="menuItem"><a href="#collapseFour">collapseFour</a></li>
+                <li class="menuItem"><a href="#collapseFive">collapseFive</a></li> 
+              </ul>
+            </div>
+          </div>
+        </div> 
+      </div><!-- End Navbar -->
+      
+      </div>
+    </div> <!-- END NAVBAR -->
+				
+					
+				
+			
+			<form class="form-horizontal" id="form" role="form" action="/pdfbpoc/user/add.do" method="post" novalidate="novalidate" namespace="/user">						
+				<div class="panel-group" id="accordion">
+					<div class="panel panel-info">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a href="#collapseOne" data-toggle="collapse">基本信息</a>
+							</h4>
+						</div>
+						<div class="panel-collapse collapse in" id="collapseOne">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-lg-6 col-md-6 col-xs-12">
+										<div class="row form-group">
+											<div class="col-xs-4">
+												<label class="control-label" for="userCode"><font color="#ff0000" size="+1" style="vertical-align: middle;">*</font>用户代码</label>
+											</div>
+											<div class="col-xs-6">
+												<input name="prpDuser.userCode" class="form-control" id="userCode" type="text" value="">
+											</div>
+										</div>
+									</div>
+									 <div class="col-lg-6 col-md-6 col-xs-12">
+										<div class="row form-group">
+											<div class="col-xs-4">
+												<label class="control-label" for="password">密码</label>
+											</div>
+											<div class="col-xs-6">
+												<input name="prpDuser.password" class="form-control" id="password" type="password" placeholder="不输入将保留默认密码0000" value="">
+											</div>
+										</div>
+									</div> 
+								</div>
+								<!-- row 强制换行 -->
+								<div class="row">
+									<div class="col-lg-6 col-md-6 col-xs-12">
+										<div class="row form-group">
+											<div class="col-xs-4">
+												<label class="control-label" for="userName"><font color="#ff0000" size="+1" style="vertical-align: middle;">*</font>用户名称</label>
+											</div>
+											<div class="col-xs-6">
+												<input name="prpDuser.userName" class="form-control" id="userName" type="text" value="">
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-6 col-xs-12">
+										<div class="row form-group">
+											<div class="col-xs-4">
+												<label class="control-label" for="comCName"><font color="#ff0000" size="+1" style="vertical-align: middle;">*</font>归属机构</label>
+											</div>
+											<div class="col-xs-6">
+												<div class="input-group">
+													<input name="prpDuser.prpDcompany.comCode" id="comCode" type="hidden" value="">
+													<input name="prpDuser.prpDcompany.comCName" class="form-control" id="comCName" type="text" value="">
+														<span class="radius input-group-addon"><a title="点击查询" class="glyphicon glyphicon-search" onclick="comCodeLookup('comCode','comCName');" href="javascript:void(0)">
+	                                                 </a></span>
+                                              	</div>
+													
+											
+											</div>
+										</div>
+									</div>									
+									
+								</div>								
+							</div>
+						</div>
+					</div>
+						
+					<div class="panel panel-info">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a href="#collapseFour" data-toggle="collapse">用户配置</a>
+							</h4>
+						</div>
+						<div class="panel-collapse collapse in" id="collapseFour">
+							<div class="panel-body">
+							
+								<div class="row">
+									
+									<div class="col-lg-6 col-md-6 col-xs-12">
+										<div class="row form-group control-group">
+											<div class="col-xs-4">
+												<label class="control-label" for="passwordExpireDate">密码设置日期</label>
+											</div>
+											<div class="col-xs-4 controls">
+												<div class="input-group input-append date form_date">
+													<input name="prpDuser.passwdSetDate" class="form-control" id="prpDuser.passwdSetDate" type="text" value="">
+													<span class="input-group-addon add-on"> <i class="glyphicon glyphicon-th"> </i>
+													</span>
+												</div>
+											</div>
+											
+												
+										</div>
+									</div>
+									
+									
+									<div class="col-lg-6 col-md-6 col-xs-12">
+										<div class="row form-group control-group">
+											<div class="col-xs-4">
+												<label class="control-label" for="passwordExpireDate">密码过期日期</label>
+											</div>
+											<div class="col-xs-4 controls">
+												<div class="input-group input-append date form_date">
+													<input name="prpDuser.passwdExpireDate" class="form-control" id="prpDuser.passwdExpireDate" type="text" value="">
+													<span class="input-group-addon add-on"> <i class="glyphicon glyphicon-th"> </i>
+													</span>
+												</div>
+											</div>
+											
+												
+										</div>
+									</div>
+									
+								
+								</div>								
+								<div class="row">
+									<div class="col-lg-6 col-md-6 col-xs-12">
+										<div class="row form-group">
+											<div class="col-xs-4">
+												<label class="control-label" for="validStatus">标志是否有效</label>
+											</div>
+											<div class="col-xs-4">
+												<input name="prpDuser.validStatus" id="validStatus" type="radio" value="1">有效
+												<input name="prpDuser.validStatus" id="validStatus" type="radio" value="0">无效
+												
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-6 col-xs-12">
+										<div class="row form-group">											
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="panel panel-info">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a href="#collapseFive" data-toggle="collapse">加减条</a>
+							</h4>
+						</div>
+						<div class="panel-collapse collapse in" id="collapseFive">
+							<div class="panel-body">
+								<div class="panel-collapse collapse in" id="collapse2">
+							<div class="panel-body">
+								<div class="dataTables_wrapper no-footer" id="condsTable_wrapper"><div class="dataTables_scroll"><div class="dataTables_scrollHead" style="border: 0px currentColor; width: 100%; overflow: hidden; position: relative;"><div class="dataTables_scrollHeadInner" style="width: 992px; padding-right: 0px; box-sizing: content-box;"><table width="100%" class="display dataTable no-footer" role="grid" style="width: 992px; margin-left: 0px;" cellspacing="0"><thead>
+										<tr role="row"><th class="sorting_disabled" style="width: 376px;" rowspan="1" colspan="1">userCode</th><th class="sorting_disabled" style="width: 376px;" rowspan="1" colspan="1">userName</th><th class="sorting_disabled" style="width: 132px;" rowspan="1" colspan="1">操作</th></tr>
+									</thead></table></div></div><div class="dataTables_scrollBody" style="width: 100%; height: 400px; overflow: auto;"><table class="display dataTable no-footer" id="condsTable" role="grid" style="width: 992px;" cellspacing="0"><thead>
+										<tr role="row" style="height: 0px;"><th class="sorting_disabled" style="width: 376px; height: 0px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px;" rowspan="1" colspan="1"><div class="dataTables_sizing" style="height: 0px; overflow: hidden;">userCode</div></th><th class="sorting_disabled" style="width: 376px; height: 0px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px;" rowspan="1" colspan="1"><div class="dataTables_sizing" style="height: 0px; overflow: hidden;">userName</div></th><th class="sorting_disabled" style="width: 132px; height: 0px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px;" rowspan="1" colspan="1"><div class="dataTables_sizing" style="height: 0px; overflow: hidden;">操作</div></th></tr>
+									</thead>
+									
+									<tbody>
+										
+									<tr class="odd" role="row">
+											<td><input name="userCode1" class="form-control" id="userCode1" type="text" value="1"></td>
+											<td><input name="userName1" class="form-control" id="userName1" type="text"></td>
+											<td><button class="btn btn-default glyphicon glyphicon-minus btn-condsTableDel" onclick="delRow(this)" type="button">删除</button></td>
+										</tr></tbody>
+								</table></div></div></div>
+							</div>
+							<button class="btn btn-default glyphicon glyphicon-plus col-lg-offset-11 btn-condsTable" type="button">新增</button>
+						</div>
+								 								
+								 
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-info">
+						<div class="panel-collapse collapse in" id="#collapseFour">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-lg-12">
+										<div class="text-center">
+											<button class="btn btn-info btn-submit" type="submit">提交</button>
+											<button class="btn btn-default btn-return" type="button">返回</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div tabindex="-1" class="modal fade" id="ajax-comModal" role="dialog" style="display: none;"></div>
+	
+	
+ 	<script src="/pdfbpoc/common/js/AjaxEdit.js"></script> 
+	<script src="/pdfbpoc/pages/platform/user/js/UserEdit.js"></script> 
+	<script type="text/javascript">
+	function comCodeLookup(codeFieldId,nameFieldId) {
+		var $modal = $('#ajax-comModal');
+		$modal.load(contextPath + "/lookup/comCodeLookup.do?codeFieldId="+codeFieldId+"&nameFieldId="+nameFieldId, '',
+				function() {
+					$modal.modal();
+				});
+	};
+	
+	$(function() {
+		var condsTable = $('#condsTable').DataTable({
+			"paging" : false,
+			"info" : false,
+			"searching" : false,
+			"scrollX" : true,
+			"scrollY":  400,
+			"ordering" : false,
+			"language" : {
+				"emptyTable" :  "没有数据",
+			}
+		});
+		
+		$('.btn-condsTable').on( 'click', function () {
+			var counter = $("#condsTable tbody tr").length;
+			var noCounter = counter + 1;
+			condsTable.row.add( [
+	            '<input id="userCode'+ counter +' name="userCode'+ counter +' class="form-control" type="text"	/>',
+	            '<input id="userName'+ counter +' name="userName'+ counter +' class="form-control" type="text"	/>',
+	            '<button type="button" class="btn btn-default glyphicon glyphicon-minus btn-condsTableDel" onclick="delRow(this)">删除</button>'
+	        ] ).draw();
+	    } );
+	});
+	function delRow(obj){
+		$(obj).parent().parent().addClass("selected");
+		var condsTable = $('#condsTable').DataTable();
+		condsTable.row(".selected").remove().draw();
+	};
+</script>
+	
+
+		</div>
+	</div>
+
+<script type="text/javascript">
+$(function(){
+	$("#menuToggle").click(function(){
+		$(".navbar-static-side").toggle('fast');
+		if($("#page-wrapper").css("margin-left") == '0px'){
+			$("#page-wrapper").css("margin-left",'250px');
+			$("#menuChange").removeClass("glyphicon-circle-arrow-right").addClass("glyphicon-circle-arrow-left").attr("title","关闭菜单");
+		}else{
+			$("#page-wrapper").css("margin-left",'0px');
+			$("#menuChange").removeClass("glyphicon-circle-arrow-left").addClass("glyphicon-circle-arrow-right").attr("title","打开菜单");
+		}
+	});
+	$(".navbar-static-side").css("height",$(window).height()-53);
+	$("#pwdModify").click(function(){
+		//$("#ajax-pwdModifyModal").modalmanager('loading');
+		var $modal = $("#ajax-pwdModifyModal");
+		$modal.load(contextPath+"/user/prepareUpdatePwd.do", function(){
+			$modal.modal();
+		});
+	});
+	
+	//enabling stickUp on the '.navbar-wrapper' class
+     $(".navbar-wrapper").stickUp({
+         parts: {
+           0:'collapseOne',
+           1:'collapseTwo',
+           2: 'collapseFive'
+         },
+         itemClass: 'menuItem',
+         itemHover: 'active',
+         topMargin: 'auto'
+       });
+});
+</script>
+
+<div class="datetimepicker datetimepicker-dropdown-bottom-left dropdown-menu" style="left: 457.95px; z-index: 1060;"><div class="datetimepicker-minutes" style="display: none;"><table class=" table-condensed"><thead><tr><th class="prev" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-left"></span> </th><th class="switch" colspan="5">11 三月 2015</th><th class="next" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-right"></span> </th></tr></thead><tbody><tr><td colspan="7"><span class="minute">10:00</span><span class="minute">10:05</span><span class="minute">10:10</span><span class="minute">10:15</span><span class="minute active">10:20</span><span class="minute">10:25</span><span class="minute">10:30</span><span class="minute">10:35</span><span class="minute">10:40</span><span class="minute">10:45</span><span class="minute">10:50</span><span class="minute">10:55</span></td></tr></tbody><tfoot><tr><th class="today" colspan="7">今天</th></tr></tfoot></table></div><div class="datetimepicker-hours" style="display: none;"><table class=" table-condensed"><thead><tr><th class="prev" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-left"></span> </th><th class="switch" colspan="5">11 三月 2015</th><th class="next" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-right"></span> </th></tr></thead><tbody><tr><td colspan="7"><span class="hour">0:00</span><span class="hour">1:00</span><span class="hour">2:00</span><span class="hour">3:00</span><span class="hour">4:00</span><span class="hour">5:00</span><span class="hour">6:00</span><span class="hour">7:00</span><span class="hour">8:00</span><span class="hour">9:00</span><span class="hour active">10:00</span><span class="hour">11:00</span><span class="hour">12:00</span><span class="hour">13:00</span><span class="hour">14:00</span><span class="hour">15:00</span><span class="hour">16:00</span><span class="hour">17:00</span><span class="hour">18:00</span><span class="hour">19:00</span><span class="hour">20:00</span><span class="hour">21:00</span><span class="hour">22:00</span><span class="hour">23:00</span></td></tr></tbody><tfoot><tr><th class="today" colspan="7">今天</th></tr></tfoot></table></div><div class="datetimepicker-days" style="display: block;"><table class=" table-condensed"><thead><tr><th class="prev" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-left"></span> </th><th class="switch" colspan="5">三月 2015</th><th class="next" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-right"></span> </th></tr><tr><th class="dow">日</th><th class="dow">一</th><th class="dow">二</th><th class="dow">三</th><th class="dow">四</th><th class="dow">五</th><th class="dow">六</th></tr></thead><tbody><tr><td class="day old">22</td><td class="day old">23</td><td class="day old">24</td><td class="day old">25</td><td class="day old">26</td><td class="day old">27</td><td class="day old">28</td></tr><tr><td class="day">1</td><td class="day">2</td><td class="day">3</td><td class="day">4</td><td class="day">5</td><td class="day">6</td><td class="day">7</td></tr><tr><td class="day">8</td><td class="day">9</td><td class="day">10</td><td class="day today active">11</td><td class="day">12</td><td class="day">13</td><td class="day">14</td></tr><tr><td class="day">15</td><td class="day">16</td><td class="day">17</td><td class="day">18</td><td class="day">19</td><td class="day">20</td><td class="day">21</td></tr><tr><td class="day">22</td><td class="day">23</td><td class="day">24</td><td class="day">25</td><td class="day">26</td><td class="day">27</td><td class="day">28</td></tr><tr><td class="day">29</td><td class="day">30</td><td class="day">31</td><td class="day new">1</td><td class="day new">2</td><td class="day new">3</td><td class="day new">4</td></tr></tbody><tfoot><tr><th class="today" colspan="7">今天</th></tr></tfoot></table></div><div class="datetimepicker-months" style="display: none;"><table class="table-condensed"><thead><tr><th class="prev" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-left"></span> </th><th class="switch" colspan="5">2015</th><th class="next" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-right"></span> </th></tr></thead><tbody><tr><td colspan="7"><span class="month">一月</span><span class="month">二月</span><span class="month active">三月</span><span class="month">四月</span><span class="month">五月</span><span class="month">六月</span><span class="month">七月</span><span class="month">八月</span><span class="month">九月</span><span class="month">十月</span><span class="month">十一月</span><span class="month">十二月</span></td></tr></tbody><tfoot><tr><th class="today" colspan="7">今天</th></tr></tfoot></table></div><div class="datetimepicker-years" style="display: none;"><table class="table-condensed"><thead><tr><th class="prev" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-left"></span> </th><th class="switch" colspan="5">2010-2019</th><th class="next" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-right"></span> </th></tr></thead><tbody><tr><td colspan="7"><span class="year old">2009</span><span class="year">2010</span><span class="year">2011</span><span class="year">2012</span><span class="year">2013</span><span class="year">2014</span><span class="year active">2015</span><span class="year">2016</span><span class="year">2017</span><span class="year">2018</span><span class="year">2019</span><span class="year old">2020</span></td></tr></tbody><tfoot><tr><th class="today" colspan="7">今天</th></tr></tfoot></table></div></div><div class="datetimepicker datetimepicker-dropdown-bottom-left dropdown-menu" style="left: 984.45px; z-index: 1070;"><div class="datetimepicker-minutes" style="display: none;"><table class=" table-condensed"><thead><tr><th class="prev" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-left"></span> </th><th class="switch" colspan="5">11 三月 2015</th><th class="next" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-right"></span> </th></tr></thead><tbody><tr><td colspan="7"><span class="minute">10:00</span><span class="minute">10:05</span><span class="minute">10:10</span><span class="minute">10:15</span><span class="minute active">10:20</span><span class="minute">10:25</span><span class="minute">10:30</span><span class="minute">10:35</span><span class="minute">10:40</span><span class="minute">10:45</span><span class="minute">10:50</span><span class="minute">10:55</span></td></tr></tbody><tfoot><tr><th class="today" colspan="7">今天</th></tr></tfoot></table></div><div class="datetimepicker-hours" style="display: none;"><table class=" table-condensed"><thead><tr><th class="prev" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-left"></span> </th><th class="switch" colspan="5">11 三月 2015</th><th class="next" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-right"></span> </th></tr></thead><tbody><tr><td colspan="7"><span class="hour">0:00</span><span class="hour">1:00</span><span class="hour">2:00</span><span class="hour">3:00</span><span class="hour">4:00</span><span class="hour">5:00</span><span class="hour">6:00</span><span class="hour">7:00</span><span class="hour">8:00</span><span class="hour">9:00</span><span class="hour active">10:00</span><span class="hour">11:00</span><span class="hour">12:00</span><span class="hour">13:00</span><span class="hour">14:00</span><span class="hour">15:00</span><span class="hour">16:00</span><span class="hour">17:00</span><span class="hour">18:00</span><span class="hour">19:00</span><span class="hour">20:00</span><span class="hour">21:00</span><span class="hour">22:00</span><span class="hour">23:00</span></td></tr></tbody><tfoot><tr><th class="today" colspan="7">今天</th></tr></tfoot></table></div><div class="datetimepicker-days" style="display: block;"><table class=" table-condensed"><thead><tr><th class="prev" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-left"></span> </th><th class="switch" colspan="5">三月 2015</th><th class="next" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-right"></span> </th></tr><tr><th class="dow">日</th><th class="dow">一</th><th class="dow">二</th><th class="dow">三</th><th class="dow">四</th><th class="dow">五</th><th class="dow">六</th></tr></thead><tbody><tr><td class="day old">22</td><td class="day old">23</td><td class="day old">24</td><td class="day old">25</td><td class="day old">26</td><td class="day old">27</td><td class="day old">28</td></tr><tr><td class="day">1</td><td class="day">2</td><td class="day">3</td><td class="day">4</td><td class="day">5</td><td class="day">6</td><td class="day">7</td></tr><tr><td class="day">8</td><td class="day">9</td><td class="day">10</td><td class="day today active">11</td><td class="day">12</td><td class="day">13</td><td class="day">14</td></tr><tr><td class="day">15</td><td class="day">16</td><td class="day">17</td><td class="day">18</td><td class="day">19</td><td class="day">20</td><td class="day">21</td></tr><tr><td class="day">22</td><td class="day">23</td><td class="day">24</td><td class="day">25</td><td class="day">26</td><td class="day">27</td><td class="day">28</td></tr><tr><td class="day">29</td><td class="day">30</td><td class="day">31</td><td class="day new">1</td><td class="day new">2</td><td class="day new">3</td><td class="day new">4</td></tr></tbody><tfoot><tr><th class="today" colspan="7">今天</th></tr></tfoot></table></div><div class="datetimepicker-months" style="display: none;"><table class="table-condensed"><thead><tr><th class="prev" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-left"></span> </th><th class="switch" colspan="5">2015</th><th class="next" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-right"></span> </th></tr></thead><tbody><tr><td colspan="7"><span class="month">一月</span><span class="month">二月</span><span class="month active">三月</span><span class="month">四月</span><span class="month">五月</span><span class="month">六月</span><span class="month">七月</span><span class="month">八月</span><span class="month">九月</span><span class="month">十月</span><span class="month">十一月</span><span class="month">十二月</span></td></tr></tbody><tfoot><tr><th class="today" colspan="7">今天</th></tr></tfoot></table></div><div class="datetimepicker-years" style="display: none;"><table class="table-condensed"><thead><tr><th class="prev" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-left"></span> </th><th class="switch" colspan="5">2010-2019</th><th class="next" style="visibility: visible;"><span class="glyphicon glyphicon-arrow-right"></span> </th></tr></thead><tbody><tr><td colspan="7"><span class="year old">2009</span><span class="year">2010</span><span class="year">2011</span><span class="year">2012</span><span class="year">2013</span><span class="year">2014</span><span class="year active">2015</span><span class="year">2016</span><span class="year">2017</span><span class="year">2018</span><span class="year">2019</span><span class="year old">2020</span></td></tr></tbody><tfoot><tr><th class="today" colspan="7">今天</th></tr></tfoot></table></div></div></body></html>

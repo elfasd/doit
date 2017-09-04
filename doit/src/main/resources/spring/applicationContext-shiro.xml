@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        ">
+
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"> </bean>
+
+    <!-- session factory -->
+    <bean id="sessionFactoryShiro" class="org.apache.shiro.session.mgt.SimpleSessionFactory"> </bean>
+
+
+    <!-- session IDs begin  -->
+    <!-- shiro自带生成器-->
+    <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
+    <!-- 自定义sessionID生成器 -->
+    <bean id="redisSessionIdGenerator" class="com.asd.common.shiro.sessionid.JavaUuidSessionIdGenerator"/>
+    <!-- session IDs end  -->
+
+    <!-- 集成redis begin -->
+    <bean id="redisManager" class="com.asd.common.shiro.support.RedisManager" lazy-init="true">
+        <property name="host" value="${redis.host}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="expire" value="${redis.expire}"/>
+        <property name="timeout" value="${redis.timeout}"/>
+        <property name="password" value="${redis.password}"/>
+    </bean>
+    <!-- 集成redis end -->
+
+    <!-- realms begin-->
+    <!--
+      	使用Shiro自带的JdbcRealm类
+      	指定密码匹配所需要用到的加密对象
+      	指定存储用户、角色、权限许可的数据源及相关查询语句
+     -->
+    <bean id="jdbcRealm" class="org.apache.shiro.realm.jdbc.JdbcRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"> </property>
+        <property name="permissionsLookupEnabled" value="true"> </property>
+        <property name="dataSource" ref="dataSource"> </property>
+        <property name="authenticationQuery"
+                  value="select userpwd from t_common_user where usercode = ?"> </property>
+        <property name="userRolesQuery"
+                  value="select ug.gradeid from t_common_user u,t_common_usergrade ug where
+             u.u_id=ug.u_id and u.usercode=?"> </property>
+        <property name="permissionsQuery"
+                  value="select distinct t.taskcode from t_common_task t,t_common_gradetask gt where t.task_id = gt.taskid and gt.gradeid=?"> </property>
+    </bean>
+    <!-- 如果数据库密码是MD5存储的 那么下面的配置是必须的 -->
+    <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <property name="hashAlgorithmName" value="md5" />
+    </bean>
+
+    <!-- 自定义realm1 : 与PICC用户系统对接的realm -->
+    <bean id="saaRealm" class="com.asd.common.shiro.realm.SaaRealm">
+    </bean>
+    <!-- realms end-->
+
+    <!-- sessionDaos begin-->
+    <!-- sessionDao1 : shiro自带的sessionDAO-->
+    <bean id="shiroMemorySessionDAO" class="org.apache.shiro.session.mgt.eis.MemorySessionDAO">
+        <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
+    </bean>
+
+    <!-- 自定义redis的sessionDAO -->
+    <bean id="shiroRedisSessionDAO" class="com.asd.common.shiro.support.RedisSessionDAO"  lazy-init="true">
+        <!-- 集成redis：自定义管理器 -->
+        <property name="redisManager" ref="redisManager"/>
+        <!-- 自定义sessionID前缀 -->
+        <property name="keyPrefix" value="shiro_redis_session:" />
+        <!-- 自定义sessionID生成器 -->
+        <property name="sessionIdGenerator" ref="redisSessionIdGenerator"/>
+    </bean>
+    <!-- sessionDaos end-->
+
+    <!-- cacheManagers begin-->
+    <!-- ehcache本地缓存管理器-->
+    <bean id="shiroEhCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManager" ref="ehCacheManager"/>
+    </bean>
+    <bean id="ehCacheManager" class ="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache-shiro.xml" />
+        <property name="shared" value="true"> </property>
+    </bean>
+
+    <!-- redis 分布式缓存管理器-->
+    <bean id="shiroRedisCacheManager" class="com.asd.common.shiro.support.RedisCacheManager" lazy-init="true">
+        <!-- 集成redis：自定义管理器 -->
+        <property name="redisManager" ref="redisManager" />
+        <!-- 集成redis：缓存前缀 -->
+        <property name="keyPrefix" value="shiro_redis_cache:" />
+    </bean>
+    <!-- cacheManagers end-->
+
+    <!-- sessionManager begin-->
+    <!-- 默认的基于memory的sessionManager-->
+    <bean id="shiroDefaultSessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="sessionDAO" ref="shiroMemorySessionDAO"/>
+        <property name="sessionFactory" ref="sessionFactoryShiro"/>
+    </bean>
+
+    <!--自定义redis的sessionManager -->
+    <bean id="shiroRedisSessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="sessionDAO" ref="shiroRedisSessionDAO"/>
+        <property name="sessionFactory" ref="sessionFactoryShiro"/>
+    </bean>
+    <!-- sessionManager end-->
+
+    <!-- filters begin -->
+    <!-- 自定义简单踢出filter -->
+    <bean id="shiroLogoutFilter" class="com.asd.common.shiro.filter.ForceLogoutFilter"> </bean>
+    <!-- 自定义redis强制踢出filter -->
+    <bean id="kickoutFilter" class="com.asd.common.shiro.filter.KickoutFilter"  lazy-init="true">
+        <property name="redisSessionDAO" ref="shiroRedisSessionDAO"/>
+        <property name="redisManager" ref="redisManager"/>
+        <property name="kickoutUrl" value="/index.jsp" />
+    </bean>
+    <!-- filters end -->
+
+
+    <!-- Shiro安全管理器  这个是主要配置! care!-->
+    <!-- 在这里可以切换不同的realm、cacheManager、sessionManager-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!--<property name="realm" ref="saaRealm"> </property>-->
+        <property name="realm" ref="jdbcRealm"> </property>
+        <property name="cacheManager" ref="shiroRedisCacheManager"> </property>
+        <!--<property name="cacheManager" ref="shiroEhCacheManager"> </property>-->
+        <property name="sessionManager" ref="shiroRedisSessionManager" />
+        <!--<property name="sessionManager" ref="shiroDefaultSessionManager" />-->
+</bean>
+
+<!--
+Shiro主过滤器本身功能十分强大，其强大之处就在于它支持任何基于URL路径表达式的、自定义的过滤器的执行
+Web应用中，Shiro可控制的Web请求必须经过Shiro主过滤器的拦截，Shiro对基于Spring的Web应用提供了完美的支持
+-->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!-- Shiro的核心安全接口，这个属性是必须的 -->
+        <property name="securityManager" ref="securityManager"> </property>
+        <!-- 要求登录时的链接(登录页面地址)，非必须的属性，默认会自动寻找Web工程根目录下的"/login.jsp"页面 -->
+        <!-- <property name="loginUrl" value="/security/login"></property>   -->
+        <!-- 登录成功后要跳转的连接(本例中此属性用不到，因为登录成功后的处理逻辑在LoginController里硬编码) -->
+        <!-- <property name="successUrl" value="/" ></property> -->
+        <!-- 用户访问未对其授权的资源时，所显示的连接 -->
+        <property name="unauthorizedUrl" value="/"> </property>
+        <!-- 自定义filter -->
+        <property name="filters">
+            <map>
+                <!-- 这里可以自定义filter 定义完毕后可以在下面的filterChainDefinitions中使用-->
+                <!-- 这个是本地缓存的踢出方案-->
+                <entry key="forceLogout" value-ref="shiroLogoutFilter" />
+                <!-- 这个是redis分布式缓存的踢出方案-->
+                <entry key="kickoutFilter" value-ref="kickoutFilter" />
+     </map>
+ </property>
+ <!--
+     authc表示需要认证，roles表示角色，perms表示权限，anon表示游客，user表示用户
+  -->
+        <property name="filterChainDefinitions">
+            <value>
+                /login/*=anon <!-- 不拦截登录/登出界面的请求 -->
+                /bs/**=anon 	<!-- 不拦截登录界面等使用的JS CSS文件 -->
+                /layout/**=anon <!-- 不拦截SiteMesh3使用的JS CSS文件 -->
+                /**=kickoutFilter,authc <!-- 拦截除上面之外的所有请求 -->
+                <!--/**=forceLogout,authc-->  <!-- 拦截除上面之外的所有请求 -->
+            </value>
+        </property>
+    </bean>
+</beans>

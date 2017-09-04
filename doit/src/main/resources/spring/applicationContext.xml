@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       ">
+
+
+    <!-- common config-->
+    <import resource="applicationContext-common.xml"/>
+	<!-- hibernate config-->
+	<import resource="applicationContext-hibernate.xml"/>
+    <!-- spring config-->
+    <import resource="applicationContext-bean.xml"/>
+ 	<!-- shiro config-->
+	<import resource="applicationContext-shiro.xml"/>
+    <!-- activiti config-->
+    <!-- redis config-->
+    <import resource="applicationContext-redis.xml"/>
+</beans>

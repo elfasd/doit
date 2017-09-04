@@ -1,0 +1,10 @@
+table.dataTable th.center,table.dataTable td.center,table.dataTable td.dataTables_empty {
+		text-align:center
+	}
+div.dataTables_length label {
+		float: left;
+		padding-top: 0.45em;
+	}
+div.dataTables_info{
+		float: left;
+}
