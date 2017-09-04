@@ -122,11 +122,11 @@
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <!--<property name="realm" ref="saaRealm"> </property>-->
         <property name="realm" ref="jdbcRealm"> </property>
-        <property name="cacheManager" ref="shiroRedisCacheManager"> </property>
-        <!--<property name="cacheManager" ref="shiroEhCacheManager"> </property>-->
-        <property name="sessionManager" ref="shiroRedisSessionManager" />
-        <!--<property name="sessionManager" ref="shiroDefaultSessionManager" />-->
-</bean>
+        <!--<property name="cacheManager" ref="shiroRedisCacheManager"> </property>-->
+        <property name="cacheManager" ref="shiroEhCacheManager"> </property>
+        <!--<property name="sessionManager" ref="shiroRedisSessionManager" />-->
+        <property name="sessionManager" ref="shiroDefaultSessionManager" />
+    </bean>
 
 <!--
 Shiro主过滤器本身功能十分强大，其强大之处就在于它支持任何基于URL路径表达式的、自定义的过滤器的执行
@@ -159,8 +159,8 @@ Web应用中，Shiro可控制的Web请求必须经过Shiro主过滤器的拦截�
                 /login/*=anon <!-- 不拦截登录/登出界面的请求 -->
                 /bs/**=anon 	<!-- 不拦截登录界面等使用的JS CSS文件 -->
                 /layout/**=anon <!-- 不拦截SiteMesh3使用的JS CSS文件 -->
-                /**=kickoutFilter,authc <!-- 拦截除上面之外的所有请求 -->
-                <!--/**=forceLogout,authc-->  <!-- 拦截除上面之外的所有请求 -->
+                /**=authc <!-- 拦截除上面之外的所有请求 -->
+                <!--/**=forceLogout,authc,kickoutFilter-->  <!-- 拦截除上面之外的所有请求 -->
             </value>
         </property>
     </bean>

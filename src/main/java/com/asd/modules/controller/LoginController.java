@@ -48,22 +48,6 @@ public class LoginController {
     @ApiOperation(value = "添加用户", httpMethod = "POST", response = LoginController.class, notes = "add user")
     public String login(String usercode, String userpwd, ModelMap model, HttpServletRequest request, HttpServletResponse response ){
 
-        try {
-
-            menuResInfos =  userAPIService.getMenuByUser("reinsop","A000008669","1");
-            for(MenuResInfo m : menuResInfos) {
-                System.out.println(m.getMENUCNAME() +"   ----------------");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        javax.servlet.http.Cookie[] cookies = request.getCookies();//这样便可以获取一个cookie数组
-        for(Cookie cookie : cookies){
-            System.out.println("name:"+cookie.getName()+",value:"+ cookie.getValue());
-        }
-
         log.info(usercode + " 用户尝试登录");
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(usercode,userpwd);
