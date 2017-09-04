@@ -40,6 +40,7 @@ public class ActivitiController {
             RuntimeService runtimeService = processEngine.getRuntimeService();
             ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("myProcess",vs);
 
+            System.out.println("11111111111111");
 
 
 
